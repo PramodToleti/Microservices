@@ -1,4 +1,5 @@
 import {
+  UsersApi,
   GetUsersResponse,
   GetUserByIdResponse,
   AddUserResponse,
@@ -8,7 +9,7 @@ import {
 import { Api } from "../../../dist/models"
 import { collections } from "../../admin/admin"
 
-export class UserApi implements UserApi {
+export class UserApiImpl implements UsersApi {
   getUsers(): Promise<GetUsersResponse> {
     return new Promise<GetUsersResponse>(async (resolve, reject) => {
       try {
