@@ -111,4 +111,41 @@ export class UserApi implements UserApi {
       }
     })
   }
+
+  updateUser(email: string, request: Api.User): Promise<UpdateUserResponse> {
+    return new Promise<UpdateUserResponse>(async(resolve, reject) => {
+        try {
+          const isPresent = await collections.users!.findOne({email})
+          if(isPresent) {
+              const updatedData = {
+                ...isPresent,
+                ...request
+              } 
+              const result = await collections.users!.updateOne({email}, {$set: updatedData})
+              const response: UpdateUserResponse = {
+                status: 200,
+                body: updatedData,
+              }
+              resolve(response)
+          } else {
+            const response: UpdateUserResponse = {
+              status: 404,
+              body: {
+                code: 404,
+                message: "User Not Found"
+              }
+            }
+            resolve(response)
+          }
+        } catch(err) {
+          /* const response: Api.ApiResponse = {
+          code: 400,
+          message: "Something Went Wrong",
+        } */
+          reject(err)
+        }
+    })
+  }
+
+ 
 }
