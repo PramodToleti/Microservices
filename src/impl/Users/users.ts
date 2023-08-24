@@ -19,13 +19,10 @@ export class UserApiImpl implements UsersApi {
           .users!.find({})
           ?.map((user) => {
             return {
-              id: user._id,
               name: user.name,
               email: user.email,
               password: user.password,
-              role: user.role,
-              createdAt: user.createdAt,
-              updatedAt: user.updatedAt,
+              age: user.age,
             }
           })
           .toArray()
@@ -50,13 +47,10 @@ export class UserApiImpl implements UsersApi {
         const isPresent = await collections.users!.findOne({ email })
         if (isPresent) {
           const formattedData = {
-            id: isPresent._id,
             name: isPresent.name,
             email: isPresent.email,
             password: isPresent.password,
-            role: isPresent.role,
-            createdAt: isPresent.createdAt,
-            updatedAt: isPresent.updatedAt,
+            age: isPresent.age,
           }
           const response: GetUserByIdResponse = {
             status: 200,
