@@ -9,6 +9,8 @@ import {
 import { Api } from "../../../dist/models"
 import { collections } from "../../admin/admin"
 
+import bcrypt from "bcrypt"
+
 export class UserApiImpl implements UsersApi {
   getUsers(): Promise<GetUsersResponse> {
     return new Promise<GetUsersResponse>(async (resolve, reject) => {
@@ -96,7 +98,14 @@ export class UserApiImpl implements UsersApi {
           }
           resolve(response)
         } else {
-          const result = await collections.users!.insertOne(request)
+          const encryptedPassword = await bcrypt.hash(
+            request.password || "",
+            10
+          )
+          const result = await collections.users!.insertOne({
+            ...request,
+            password: encryptedPassword,
+          })
           const response: AddUserResponse = {
             status: 200,
             body: request,
